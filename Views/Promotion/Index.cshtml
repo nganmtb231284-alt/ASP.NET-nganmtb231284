@@ -1,0 +1,118 @@
+@model List<CafeWebsite.Models.Promotion>
+@{
+    ViewData["Title"] = "Khuyến mãi";
+}
+
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">🎁 Khuyến mãi đặc biệt</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Khám phá những ưu đãi hấp dẫn dành riêng cho bạn
+            </p>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach (var promotion in Model)
+                {
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border-2 border-amber-100">
+                        <div class="bg-gradient-to-r from-amber-500 to-orange-500 p-4">
+                            <h3 class="text-xl font-bold text-white mb-2">@promotion.Title</h3>
+                            <div class="bg-white bg-opacity-20 rounded-lg p-2 inline-block">
+                                <span class="text-white font-mono text-lg font-bold">@promotion.Code</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">@promotion.Description</p>
+                            
+                            <div class="space-y-2 mb-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-500">Giảm:</span>
+                                    <span class="font-semibold text-amber-600">
+                                        @if (promotion.Type == CafeWebsite.Models.PromotionType.Percentage)
+                                        {
+                                            @($"{promotion.Value}%")
+                                        }
+                                        else if (promotion.Type == CafeWebsite.Models.PromotionType.FixedAmount)
+                                        {
+                                            @($"{promotion.Value:N0}đ")
+                                        }
+                                        else
+                                        {
+                                            @("Miễn phí ship")
+                                        }
+                                    </span>
+                                </div>
+                                
+                                @if (promotion.MinOrderAmount > 0)
+                                {
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-500">Đơn tối thiểu:</span>
+                                        <span class="font-semibold">@promotion.MinOrderAmount.ToString("N0")đ</span>
+                                    </div>
+                                }
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-500">Hết hạn:</span>
+                                    <span class="font-semibold text-red-600">@promotion.EndDate.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                
+                                @if (promotion.MaxUses > 0)
+                                {
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-500">Còn lại:</span>
+                                        <span class="font-semibold">@(promotion.MaxUses - promotion.UsedCount) lượt</span>
+                                    </div>
+                                }
+                            </div>
+                            
+                            <button onclick="copyCode('@promotion.Code')" class="w-full bg-amber-600 text-white py-2 px-4 rounded-lg hover:bg-amber-700 transition-colors font-semibold">
+                                📋 Sao chép mã
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-16">
+                <i data-lucide="gift" class="h-24 w-24 text-gray-400 mx-auto mb-6"></i>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Chưa có khuyến mãi</h2>
+                <p class="text-gray-600 mb-8">Hãy quay lại sau để không bỏ lỡ những ưu đãi hấp dẫn</p>
+            </div>
+        }
+        
+        <div class="mt-12 text-center">
+            <a asp-controller="Menu" asp-action="Index" class="bg-amber-600 text-white py-3 px-8 rounded-lg font-semibold hover:bg-amber-700 transition-colors no-underline">
+                Mua sắm ngay
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(function() {
+                showNotification('Đã sao chép mã: ' + code, 'success');
+            });
+        }
+        
+        function showNotification(message, type) {
+            const notification = $('<div class="fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium">')
+                .addClass(type === 'success' ? 'bg-green-500' : 'bg-red-500')
+                .text(message);
+                
+            $('body').append(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        $(document).ready(function() {
+            lucide.createIcons();
+        });
+    </script>
+}

@@ -1,0 +1,118 @@
+@model CafeWebsite.Models.CartViewModel
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Giỏ hàng của bạn</h1>
+
+        @if (Model.Items.Any())
+        {
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+                @foreach (var item in Model.Items)
+                {
+                    <div class="flex items-center p-6 border-b border-gray-200 last:border-b-0">
+                        <img src="@item.Product?.Image" alt="@item.Product?.Name" class="w-20 h-20 object-cover rounded-lg mr-4" />
+                        
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900">@item.Product?.Name</h3>
+                            <p class="text-gray-600 text-sm">Size: @item.Size</p>
+                            <p class="text-amber-600 font-semibold">@item.Price.ToString("N0") đ</p>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <button onclick="updateQuantity('@item.ProductId', '@item.Size', @(item.Quantity - 1))" 
+                                    class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center">
+                                <i data-lucide="minus" class="h-4 w-4"></i>
+                            </button>
+                            
+                            <span class="w-12 text-center font-semibold">@item.Quantity</span>
+                            
+                            <button onclick="updateQuantity('@item.ProductId', '@item.Size', @(item.Quantity + 1))" 
+                                    class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center">
+                                <i data-lucide="plus" class="h-4 w-4"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="ml-6 text-right">
+                            <p class="text-lg font-semibold text-gray-900">@item.Total.ToString("N0") đ</p>
+                            <button onclick="removeItem('@item.ProductId', '@item.Size')" 
+                                    class="text-red-500 hover:text-red-700 text-sm mt-1">
+                                <i data-lucide="trash-2" class="h-4 w-4 inline mr-1"></i>Xóa
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-xl font-semibold text-gray-900">Tổng cộng:</span>
+                    <span class="text-2xl font-bold text-amber-600" id="cart-total">@Model.Total.ToString("N0") đ</span>
+                </div>
+                
+                <div class="flex gap-4">
+                    <a asp-controller="Menu" asp-action="Index" 
+                       class="flex-1 bg-gray-200 text-gray-800 py-3 px-6 rounded-lg text-center font-semibold hover:bg-gray-300 transition-colors no-underline">
+                        Tiếp tục mua sắm
+                    </a>
+                    <a asp-action="Checkout" 
+                       class="flex-1 bg-amber-600 text-white py-3 px-6 rounded-lg text-center font-semibold hover:bg-amber-700 transition-colors no-underline">
+                        Đặt hàng
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-16">
+                <i data-lucide="shopping-cart" class="h-24 w-24 text-gray-400 mx-auto mb-6"></i>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Giỏ hàng trống</h2>
+                <p class="text-gray-600 mb-8">Hãy thêm một số sản phẩm vào giỏ hàng của bạn</p>
+                <a asp-controller="Menu" asp-action="Index" 
+                   class="bg-amber-600 text-white py-3 px-8 rounded-lg font-semibold hover:bg-amber-700 transition-colors no-underline">
+                    Khám phá thực đơn
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function updateQuantity(productId, size, quantity) {
+            if (quantity < 1) {
+                removeItem(productId, size);
+                return;
+            }
+            
+            $.post('/Cart/UpdateQuantity', {
+                productId: productId,
+                size: size,
+                quantity: quantity
+            }, function(response) {
+                if (response.success) {
+                    location.reload();
+                }
+            });
+        }
+        
+        function removeItem(productId, size) {
+            if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
+                $.post('/Cart/RemoveItem', {
+                    productId: productId,
+                    size: size
+                }, function(response) {
+                    if (response.success) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+        
+        $(document).ready(function() {
+            lucide.createIcons();
+        });
+    </script>
+}

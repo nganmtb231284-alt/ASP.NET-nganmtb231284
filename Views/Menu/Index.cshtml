@@ -1,0 +1,139 @@
+@model CafeWebsite.Models.MenuViewModel
+@{
+    ViewData["Title"] = "Thực đơn";
+}
+
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Thực đơn CoffeeShop</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Khám phá bộ sưu tập đồ uống phong phú với hương vị đặc biệt
+            </p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="flex-1">
+                    <form asp-action="Index" method="get" class="flex">
+                        <input type="text" name="search" value="@Model.SearchTerm" placeholder="Tìm kiếm sản phẩm..." 
+                               class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-amber-500" />
+                        <input type="hidden" name="category" value="@Model.SelectedCategory" />
+                        <button type="submit" class="bg-amber-600 text-white px-6 py-2 rounded-r-lg hover:bg-amber-700 transition-colors">
+                            <i data-lucide="search" class="h-5 w-5"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="flex gap-2 flex-wrap">
+                    <a asp-action="Index" asp-route-search="@Model.SearchTerm" 
+                       class="px-4 py-2 rounded-full text-sm font-medium transition-colors no-underline @(Model.SelectedCategory == null ? "bg-amber-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300")">
+                        Tất cả
+                    </a>
+                    <a asp-action="Index" asp-route-category="Coffee" asp-route-search="@Model.SearchTerm"
+                       class="px-4 py-2 rounded-full text-sm font-medium transition-colors no-underline @(Model.SelectedCategory == CafeWebsite.Models.ProductCategory.Coffee ? "bg-amber-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300")">
+                        Cà phê
+                    </a>
+                    <a asp-action="Index" asp-route-category="Tea" asp-route-search="@Model.SearchTerm"
+                       class="px-4 py-2 rounded-full text-sm font-medium transition-colors no-underline @(Model.SelectedCategory == CafeWebsite.Models.ProductCategory.Tea ? "bg-amber-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300")">
+                        Trà
+                    </a>
+                    <a asp-action="Index" asp-route-category="Smoothie" asp-route-search="@Model.SearchTerm"
+                       class="px-4 py-2 rounded-full text-sm font-medium transition-colors no-underline @(Model.SelectedCategory == CafeWebsite.Models.ProductCategory.Smoothie ? "bg-amber-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300")">
+                        Sinh tố
+                    </a>
+                    <a asp-action="Index" asp-route-category="Juice" asp-route-search="@Model.SearchTerm"
+                       class="px-4 py-2 rounded-full text-sm font-medium transition-colors no-underline @(Model.SelectedCategory == CafeWebsite.Models.ProductCategory.Juice ? "bg-amber-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300")">
+                        Nước ép
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Products.Any())
+        {
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+                        <div class="relative overflow-hidden">
+                            <img src="@product.Image" alt="@product.Name" class="w-full h-48 object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">@product.Name</h3>
+                            <p class="text-gray-600 text-sm mb-4">@product.Description</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-500">Size S</span>
+                                    <span class="font-semibold text-amber-600">@product.PriceS.ToString("N0") đ</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-500">Size M</span>
+                                    <span class="font-semibold text-amber-600">@product.PriceM.ToString("N0") đ</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-sm text-gray-500">Size L</span>
+                                    <span class="font-semibold text-amber-600">@product.PriceL.ToString("N0") đ</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <button onclick="addToCart('@product.Id', 'S')" class="w-full bg-amber-100 text-amber-800 py-2 px-4 rounded-lg hover:bg-amber-200 transition-colors text-sm font-medium">
+                                    Thêm Size S
+                                </button>
+                                <button onclick="addToCart('@product.Id', 'M')" class="w-full bg-amber-600 text-white py-2 px-4 rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium">
+                                    Thêm Size M
+                                </button>
+                                <button onclick="addToCart('@product.Id', 'L')" class="w-full bg-amber-800 text-white py-2 px-4 rounded-lg hover:bg-amber-900 transition-colors text-sm font-medium">
+                                    Thêm Size L
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-16">
+                <i data-lucide="coffee" class="h-16 w-16 text-gray-400 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Không tìm thấy sản phẩm</h3>
+                <p class="text-gray-600">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function addToCart(productId, size) {
+            $.post('/Menu/AddToCart', {
+                productId: productId,
+                size: size,
+                quantity: 1
+            }, function(response) {
+                if (response.success) {
+                    const cartCount = $('#cart-count');
+                    if (response.cartCount > 0) {
+                        cartCount.text(response.cartCount).show();
+                    }
+                    showNotification('Đã thêm vào giỏ hàng!', 'success');
+                }
+            });
+        }
+        
+        function showNotification(message, type) {
+            const notification = $('<div class="fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium">')
+                .addClass(type === 'success' ? 'bg-green-500' : 'bg-red-500')
+                .text(message);
+                
+            $('body').append(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        $(document).ready(function() {
+            lucide.createIcons();
+        });
+    </script>
+}

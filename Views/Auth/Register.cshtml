@@ -1,0 +1,66 @@
+@model CafeWebsite.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Đăng ký thành viên
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Đã có tài khoản?
+                <a asp-action="Login" class="font-medium text-amber-600 hover:text-amber-500">
+                    Đăng nhập ngay
+                </a>
+            </p>
+        </div>
+        
+        <form class="mt-8 space-y-6" asp-action="Register" method="post">
+            <div class="space-y-4">
+                <div>
+                    <label asp-for="FullName" class="block text-sm font-medium text-gray-700">Họ tên</label>
+                    <input asp-for="FullName" type="text" class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm" placeholder="Nhập họ tên">
+                    <span asp-validation-for="FullName" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input asp-for="Email" type="email" class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm" placeholder="Nhập email">
+                    <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Phone" class="block text-sm font-medium text-gray-700">Số điện thoại</label>
+                    <input asp-for="Phone" type="tel" class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm" placeholder="Nhập số điện thoại">
+                    <span asp-validation-for="Phone" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Password" class="block text-sm font-medium text-gray-700">Mật khẩu</label>
+                    <input asp-for="Password" type="password" class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm" placeholder="Nhập mật khẩu">
+                    <span asp-validation-for="Password" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="ConfirmPassword" class="block text-sm font-medium text-gray-700">Xác nhận mật khẩu</label>
+                    <input asp-for="ConfirmPassword" type="password" class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm" placeholder="Nhập lại mật khẩu">
+                    <span asp-validation-for="ConfirmPassword" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+
+            <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm"></div>
+
+            <div>
+                <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+                    Đăng ký
+                </button>
+            </div>
+            
+            <div class="text-center text-sm text-gray-600">
+                <p>🎁 Tặng ngay 100 điểm thưởng khi đăng ký thành công!</p>
+            </div>
+        </form>
+    </div>
+</div>

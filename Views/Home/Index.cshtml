@@ -1,0 +1,158 @@
+@model CafeWebsite.Models.HomeViewModel
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<div class="min-h-screen bg-gray-50">
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-r from-amber-900 to-amber-700 text-white py-20">
+        <div class="absolute inset-0 bg-black opacity-20"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-6xl font-bold mb-6">
+                Chào mừng đến với Cafe Thủy Mộc
+            </h1>
+            <p class="text-xl sm:text-2xl mb-8 opacity-90">
+                Nơi hội tụ hương vị cà phê đậm đà và đồ uống ngon nhất
+            </p>
+            <a asp-controller="Menu" asp-action="Index" class="bg-white text-amber-900 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transform hover:scale-105 transition-all duration-200 shadow-lg no-underline">
+                Khám phá thực đơn
+            </a>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Danh mục sản phẩm
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Khám phá bộ sưu tập đồ uống phong phú từ cà phê đến sinh tố tươi ngon
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <a asp-controller="Menu" asp-action="Index" asp-route-category="Coffee" class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-2xl text-center hover:shadow-lg transition-all duration-300 cursor-pointer group no-underline">
+                    <div class="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-colors">
+                        <i data-lucide="coffee" class="h-8 w-8 text-amber-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Cà phê</h3>
+                    <p class="text-gray-600">@(Model.CategoryCounts.ContainsKey(CafeWebsite.Models.ProductCategory.Coffee) ? Model.CategoryCounts[CafeWebsite.Models.ProductCategory.Coffee] : 0) sản phẩm</p>
+                </a>
+
+                <a asp-controller="Menu" asp-action="Index" asp-route-category="Tea" class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-2xl text-center hover:shadow-lg transition-all duration-300 cursor-pointer group no-underline">
+                    <div class="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-colors">
+                        <i data-lucide="heart" class="h-8 w-8 text-amber-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Trà</h3>
+                    <p class="text-gray-600">@(Model.CategoryCounts.ContainsKey(CafeWebsite.Models.ProductCategory.Tea) ? Model.CategoryCounts[CafeWebsite.Models.ProductCategory.Tea] : 0) sản phẩm</p>
+                </a>
+
+                <a asp-controller="Menu" asp-action="Index" asp-route-category="Smoothie" class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-2xl text-center hover:shadow-lg transition-all duration-300 cursor-pointer group no-underline">
+                    <div class="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-colors">
+                        <i data-lucide="award" class="h-8 w-8 text-amber-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Sinh tố</h3>
+                    <p class="text-gray-600">@(Model.CategoryCounts.ContainsKey(CafeWebsite.Models.ProductCategory.Smoothie) ? Model.CategoryCounts[CafeWebsite.Models.ProductCategory.Smoothie] : 0) sản phẩm</p>
+                </a>
+
+                <a asp-controller="Menu" asp-action="Index" asp-route-category="Juice" class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-2xl text-center hover:shadow-lg transition-all duration-300 cursor-pointer group no-underline">
+                    <div class="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-colors">
+                        <i data-lucide="users" class="h-8 w-8 text-amber-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Nước ép</h3>
+                    <p class="text-gray-600">@(Model.CategoryCounts.ContainsKey(CafeWebsite.Models.ProductCategory.Juice) ? Model.CategoryCounts[CafeWebsite.Models.ProductCategory.Juice] : 0) sản phẩm</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Sản phẩm nổi bật
+                </h2>
+                <p class="text-gray-600">
+                    Những sản phẩm được yêu thích nhất tại Cafe Thủy Mộc
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                @foreach (var product in Model.FeaturedProducts)
+                {
+                    <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-pointer">
+                        <div class="relative overflow-hidden">
+                            <img src="@product.Image" alt="@product.Name" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300" />
+                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">@product.Name</h3>
+                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">@product.Description</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-amber-600 font-bold">@product.PriceM.ToString("N0") đ</span>
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                                    @switch (product.Category)
+                                    {
+                                        case CafeWebsite.Models.ProductCategory.Coffee:
+                                            @:Cà phê
+                                            break;
+                                        case CafeWebsite.Models.ProductCategory.Tea:
+                                            @:Trà
+                                            break;
+                                        case CafeWebsite.Models.ProductCategory.Smoothie:
+                                            @:Sinh tố
+                                            break;
+                                        case CafeWebsite.Models.ProductCategory.Juice:
+                                            @:Nước ép
+                                            break;
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            
+            <div class="text-center mt-12">
+                <a asp-controller="Menu" asp-action="Index" class="bg-amber-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-amber-700 transition-colors no-underline">
+                    Xem tất cả sản phẩm
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-amber-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-bold mb-2">@Model.TotalProducts+</div>
+                    <div class="text-amber-200">Sản phẩm</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">1000+</div>
+                    <div class="text-amber-200">Khách hàng hài lòng</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">24/7</div>
+                    <div class="text-amber-200">Phục vụ</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">5★</div>
+                    <div class="text-amber-200">Đánh giá</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            lucide.createIcons();
+        });
+    </script>
+}

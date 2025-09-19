@@ -1,0 +1,9 @@
+Placeholder for Cafe Thủy Mộc Logo
+
+To add your logo:
+1. Download the logo image from: https://www.facebook.com/caphethuymocq7/
+2. Save it as "logo.jpg" in this images folder
+3. The logo should be square (recommended size: 200x200px or larger)
+4. Delete this placeholder file after adding the real logo
+
+Current logo path in code: ~/images/logo.jpg
